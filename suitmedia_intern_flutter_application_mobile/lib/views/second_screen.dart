@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class SecondScreenViews extends StatelessWidget {
-  const SecondScreenViews({super.key, required String userName});
+  final String userName;
+  const SecondScreenViews({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Center(
+      child: Text('Value: $userName'),
+    );
   }
 }

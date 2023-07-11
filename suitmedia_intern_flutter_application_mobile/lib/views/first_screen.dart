@@ -8,6 +8,27 @@ class FirstScreenViews extends StatefulWidget {
 }
 
 class _FirstScreenViewsState extends State<FirstScreenViews> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _palindromeController = TextEditingController();
+  bool? isPalindrome;
+
+  @override
+  void dispose() {
+    _palindromeController.dispose();
+    super.dispose();
+  }
+
+  void _checkPalindrome(String text) {
+    String value = _palindromeController.text;
+    value = value.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
+
+    String reversedValue = String.fromCharCodes(value.runes.toList().reversed);
+
+    setState(() {
+      isPalindrome = value == reversedValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,8 +61,9 @@ class _FirstScreenViewsState extends State<FirstScreenViews> {
                 const SizedBox(
                   height: 20,
                 ),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
                     contentPadding: EdgeInsets.only(
@@ -59,13 +81,14 @@ class _FirstScreenViewsState extends State<FirstScreenViews> {
                 const SizedBox(
                   height: 20,
                 ),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: _palindromeController,
+                  decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
                     contentPadding: EdgeInsets.only(
                         left: 16, right: 16, top: 12, bottom: 12),
-                    hintText: 'Name',
+                    hintText: 'Palindrome',
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                     ),
@@ -78,13 +101,28 @@ class _FirstScreenViewsState extends State<FirstScreenViews> {
                 const SizedBox(
                   height: 40,
                 ),
+                if (isPalindrome != null)
+                  Text(
+                    isPalindrome! ? 'Palindrome' : 'Bukan Palindrome',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                const SizedBox(
+                  height: 40,
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 31, 63, 112),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  onPressed: null,
+                  onPressed: () {
+                    _checkPalindrome(_palindromeController.text);
+                  },
                   child: const Text(
                     'Check',
                     style: TextStyle(
@@ -95,11 +133,15 @@ class _FirstScreenViewsState extends State<FirstScreenViews> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 31, 63, 112),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  onPressed: null,
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/second',
+                        arguments: _nameController.text);
+                  },
                   child: const Text(
                     'Next',
                     style: TextStyle(
