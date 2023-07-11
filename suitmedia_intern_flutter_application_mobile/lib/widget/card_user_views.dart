@@ -68,7 +68,11 @@ Widget cardUserViews(BuildContext context, UserListProvider state, int index) {
         const Divider(
           color: Colors.black12,
           thickness: 1.0,
-        )
+        ),
+        if ((state.list.page < state.list.totalPages) &
+            (index == state.list.perPage - 1)) ...[
+          const Center(child: CircularProgressIndicator()),
+        ],
       ],
     ),
   );

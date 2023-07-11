@@ -35,11 +35,16 @@ class ThirdScreenViews extends StatelessWidget {
           if (state.state == ResultState.loading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state.state == ResultState.hasData) {
-            return ListView.builder(
-              itemCount: state.list.data.length,
-              itemBuilder: (context, index) {
-                return cardUserViews(context, state, index);
-              },
+            return RefreshIndicator(
+              onRefresh: () => state.refreshData(),
+              child: ListView.builder(
+                controller: state.scrollController,
+                itemCount: state.list.data.length,
+                itemBuilder: (context, index) {
+                  return cardUserViews(context, state, index);
+                },
+
+              ),
             );
           } else if (state.state == ResultState.noData) {
             return const Center(child: Text('No Data User'));
